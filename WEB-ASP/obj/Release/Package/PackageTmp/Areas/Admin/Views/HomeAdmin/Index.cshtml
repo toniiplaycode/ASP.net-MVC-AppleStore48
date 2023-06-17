@@ -1,0 +1,200 @@
+﻿﻿﻿@model IEnumerable<WEB_ASP.Models.Product>
+
+@{
+    ViewBag.Title = "Quản lý sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main class="container">
+    <div class="float-right m-2 filter-search row">
+        <div class="filter col-12 col-xl-8">
+            <article class="product-sort">
+                <ul class="product-list" style="overflow-x: scroll">
+                    <li class="product-list__item product-item--active">
+                        <a href="~/Admin/HomeAdmin/Index" class="product-list__link @Html.Raw(ViewBag.type == null ? "product-item__link--active" : "")">Tất cả</a>
+                    </li>
+                    <li class="product-list__item">
+                        <a href="~/Admin/HomeAdmin/Index?type=1" class="product-list__link @Html.Raw(ViewBag.type == 1 ? "product-item__link--active" : "")">Iphone</a>
+                    </li>
+                    <li class="product-list__item">
+                        <a href="~/Admin/HomeAdmin/Index?type=2" class="product-list__link @Html.Raw(ViewBag.type == 2 ? "product-item__link--active" : "")">Ipad</a>
+                    </li>
+                    <li class="product-list__item">
+                        <a href="~/Admin/HomeAdmin/Index?type=3" class="product-list__link @Html.Raw(ViewBag.type == 3 ? "product-item__link--active" : "")">Mac</a>
+                    </li>
+                    <li class="product-list__item">
+                        <a href="~/Admin/HomeAdmin/Index?type=4" class="product-list__link @Html.Raw(ViewBag.type == 4 ? "product-item__link--active" : "")">Watch</a>
+                    </li>
+                    <li class="product-list__item">
+                        <a href="~/Admin/HomeAdmin/Index?type=5" class="product-list__link @Html.Raw(ViewBag.type == 5 ? "product-item__link--active" : "")">Âm Thanh</a>
+                    </li>
+                </ul>
+            </article>
+        </div>
+        <div class="add-product col-12 col-xl-4">
+            <a href="~/Admin/SecureHome/AddProduct" class="btn btn-success">Thêm mới sản phẩm</a>
+        </div>
+    </div>
+
+    <form action="~/Admin/HomeAdmin/">
+        <div class="input-group rounded m-2">
+            <input type="search" class="form-control rounded" name="search" placeholder="Tìm kiếm sản phẩm..." value="@ViewBag.search" />
+            <button type="submit" class="input-group-text border-0 mx-2">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </form>
+
+
+    @if (Model.Count() == 0)
+    {
+        <div style="text-align-last: center; margin-top: 50px;">
+            <h3>Không tìm thấy sản phẩm nào khớp với tìm kiếm của bạn !</h3>
+        </div>
+    }
+    else
+    {
+        //Hiển thị trên PC
+        <div class="d-none d-md-block">
+            <table class="table table-hover mx-2" style="text-align: center; vertical-align: baseline;">
+                <thead>
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <th>Ảnh</th>
+                        <th>Giá mới</th>
+                        <th>Giá Cũ</th>
+                        <th>Dòng</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                @foreach (var product in Model)
+                {
+                    <tbody>
+                        <tr>
+                            <td style="width: 20%;">@product.Name_product</td>
+                            <td>
+                                <img src="~/@product.Image" style="width:100px">
+                            </td>
+                            <td>@string.Format("{0:#,0}", product.Price)₫</td>
+                            <td>@string.Format("{0:#,0}", product.Discount)₫</td>
+                            <td>
+                                @switch (product.IdCategory)
+                                {
+                                    case 1:<span>Iphone</span> break;
+                                    case 2:<span>Ipad</span> break;
+                                    case 3:<span>Mac</span> break;
+                                    case 4:<span>Watch</span>break;
+                                    case 5:<span>Sound</span>break;
+                                }
+                            </td>
+                            <td>
+                                <a href="~/Admin/SecureHome/EditProduct?id=@product.IdProduct" class="btn btn-primary">Sửa</a>
+                                <a class="btn btn-danger" onclick="confirmDeleteProduct(@product.IdProduct)">Xoá</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </div>
+
+        //Hiển thị trên Mobile
+        <div class="d-block d-md-none">
+            @foreach (var product in Model)
+            {
+                <div class="each-product">
+                    <div class="name-img">
+                        <div class="product-name">
+                            @product.Name_product
+                        </div>
+                        <div class="product-img">
+                            <img src="~/@product.Image" style="width:100px">
+                        </div>
+                    </div>
+                    <div class="info-action">
+                        <div class="product-price">
+                            <span>Giá mới: </span> @string.Format("{0:#,0}", product.Price)₫
+                        </div>
+                        <div class="product-discount">
+                            <span>Giá cũ: </span> @string.Format("{0:#,0}", product.Discount)₫
+                        </div>
+                        <div class="product-category">
+                            <span>Dòng: </span>
+                            @switch (product.IdCategory)
+                            {
+                                case 1:<span>Iphone</span> break;
+                                case 2:<span>Ipad</span> break;
+                                case 3:<span>Mac</span> break;
+                                case 4:<span>Watch</span>break;
+                                case 5:<span>Sound</span>break;
+                            }
+                        </div>
+                        <div class="product-action">
+                            <a href="~/Admin/SecureHome/EditProduct?id=@product.IdProduct" class="btn btn-primary">Sửa</a>
+                            <a class="btn btn-danger" onclick="confirmDeleteProduct(@product.IdProduct)">Xoá</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+
+    <div class="product-full-item-detail__number-page">
+        <ul class="number-page__list">
+            <li class="number-page__item">
+                @if (ViewBag.Page > 1)
+                {
+                    <a href="@Url.Action("", new {search = ViewBag.search, page = ViewBag.Page - 1, type = ViewBag.type})"
+                       class="number-page__item-link">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                }
+            </li>
+            @for (int i = 1; i <= ViewBag.MaxPage; i++)
+            {
+                <li class="number-page__item">
+                    <a href="@Url.Action("", new {search = ViewBag.search, page = i, type = ViewBag.type})" class="number-page__item-link @Html.Raw(ViewBag.Page == i ? " number-page__item-link--active" : "")">
+                        @i
+                    </a>
+                </li>
+            }
+            <li class="number-page__item">
+                @if (ViewBag.Page < ViewBag.MaxPage)
+                {
+                    <a href="@Url.Action("", new {search = ViewBag.search, page = ViewBag.Page + 1, type = ViewBag.type})"
+                       class="number-page__item-link">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                }
+            </li>
+        </ul>
+    </div>
+
+    <input class="actionProduct" type="hidden" value="@ViewBag.actionProduct" />
+    <div id="snackbar"> @ViewBag.message <img src="~/@ViewBag.actionProduct" style="width: 80px" /> </div>
+</main>
+
+
+@section handleJavascript{
+    <script>
+        //------------sau khi thêm 1 sản phẩm thành công thì sẽ hiện toast message này lên-------------
+        let actionProduct = document.querySelector('.actionProduct').value;
+        if (actionProduct.length > 0) {
+            toastMessage();
+        }
+
+        function toastMessage() {
+            var x = document.getElementById("snackbar");
+            x.className = "show";
+            setTimeout(function () { x.className = x.className.replace("show", ""); }, 5000);
+        }
+
+        //------------xác nhận trước khi xoá------------
+        function confirmDeleteProduct(id) {
+            const checkConfirm = confirm("Bạn chắc chắn xoá sản phẩm này chứ ?");
+            if (checkConfirm) {
+                window.location.href = `/Admin/SecureHome/DeleteProduct?id=${id}`;
+            }
+        }
+    </script>
+}

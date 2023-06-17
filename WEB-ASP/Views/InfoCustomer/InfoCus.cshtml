@@ -1,0 +1,67 @@
+﻿@model WEB_ASP.Models.Account
+@{
+    ViewBag.Title = "InfoCustomer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    WEB_ASP.Models.DB_Entities _db = new WEB_ASP.Models.DB_Entities();
+    int id = int.Parse(Session["id"].ToString());
+    var user = _db.Accounts.Find(id);
+}
+<section class="main">
+    <div class="product-full info-mobile">
+        <div class="grid container">
+            <div class="info-client row">
+                <div class="info-slide col-12 col-md-4">
+                    <div class="list-box">
+                        <ul class="list-box__list">
+                            <li class="list-box__item list-box__item--active">
+                                <a href="Infor.html">
+                                    <i class="fa-solid fa-user"></i> Thông tin tài khoản
+                                </a>
+                            </li>
+                            <li class="list-box__item">
+                                <a href="@Url.Action("OrderCustomer","infoCustomer")">
+                                    <i class="fa-solid fa-cart-shopping"></i> Đơn đặt hàng
+                                </a>
+                            </li>
+                            <li class="list-box__item">
+                                <a href="@Url.Action("Logout","Account")">
+                                    <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="info-detail col-12 col-md-8">
+                    <div class="info-detail__box">
+
+                        <form method="post" action="EditInfoCustomr" >
+                            <div class="form-signup__item-name info-detail__box-name">
+                                <label class="label-signup" for="full_name">Họ và tên</label>
+                                <input required class="input-singup" type="text" name="full_name" value="@user.FullName">
+                            </div>
+
+                            <div class="form-signup__item-name info-detail__box-name">
+                                <label class="label-signup" for="username">User Name</label>
+                                <input required class="input-singup" type="text" name="username" value="@user.User_Name">
+                            </div>
+
+                            <div class="form-signup__item-phone mb-15 info-detail__box-phone">
+                                <label class="label-signup" for="phone">Điện thoại</label>
+                                <input required class="input-singup" type="tel" name="phone" value="@user.Phone">
+                            </div>
+
+                            <div class="form-signup__item-btn">
+                                <button type="submit">Lưa lại</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

@@ -1,0 +1,85 @@
+﻿﻿@model WEB_ASP.Models.AccountModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Register";
+}
+
+@* BEGIN SING UP *@
+
+<section class="main" id="sign-up">
+    <article class="grid registration-page">
+        <div class="page-body">
+            <div class="customer container">
+                <div class="wrapper d-none d-sm-none d-md-block">
+                    <img class="wrapper-img" src="~/asset/img/Form/img_dangky.jpeg" alt="wrapper sign up">
+                </div>
+
+                <form class="form-signup" action="Register" method="post" autocomplete="off">
+                    <div class="form-signup__item">
+                        <h1 class="form-signup__item-title">Đăng ký</h1>
+                        <div class="form-signup__item-name">
+                            <label class="label-signup" for="full_name">Họ và tên: </label>
+                            <input class="input-singup" type="text" name="Fullname_user">
+                            @Html.ValidationMessageFor(model => model.Fullname_user, null, new
+                            {
+                                @class = "messger_error",
+                                @style = "color: red"
+                            })
+                        </div>
+
+                        <div class="form-signup__item-name">
+                            <label class="label-signup" for="your phone">Điện thoại: </label>
+                            <input class="input-singup" type="tel" name="phone">
+                            @Html.ValidationMessageFor(model => model.Phone, null, new
+                            {
+                                @class = "messger_error",
+                                @style = "color: red"
+                            })
+                        </div>
+
+                        <div class="form-signup__item-name">
+                            <label class="label-signup" for="Username">Username:</label>
+                            <input class="input-singup" type="text" name="User_name">
+                            @Html.ValidationMessageFor(model => model.User_name, null, new
+                            {
+                                @class = "messger_error",
+                                @style = "color: red"
+                            })
+                        </div>
+
+                        <div class="form-signup__item-name">
+                            <label class="label-signup" for="Username">Mật khẩu</label>
+                            <input class="input-singup" type="password" name="Password">
+                            @Html.ValidationMessageFor(model => model.Password, null, new
+                            {
+                                @class = "messger_error",
+                                @style = "color: red"
+                            })
+                        </div>
+
+                        <div class="form-signup__item-name">
+                            <label class="label-signup" for="Username">Xác nhận mật khẩu:</label>
+                            <input class="input-singup" type="password" name="F_Password">
+                            @Html.ValidationMessageFor(model => model.F_Password, null, new
+                            {
+                                @class = "messger_error",
+                                @style = "color: red"
+                            })
+                        </div>
+
+                        <div class="form-signup__item-btn">
+                            <button type="submit">Đăng ký</button>
+                        </div>
+
+                        <div class="buttons-forgot">
+                            <label> Bạn đã có tài khoản? </label>
+                            @Html.ActionLink("Đăng nhập ngay", "Login", "Account", null, new { @class = "link_access" })
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </article>
+</section>
+
+<script src="~/asset/main.js"></script>

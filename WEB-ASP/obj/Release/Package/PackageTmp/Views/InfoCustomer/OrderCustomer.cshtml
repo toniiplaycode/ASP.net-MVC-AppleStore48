@@ -1,0 +1,198 @@
+﻿@{
+    ViewBag.Title = "OrderCustomer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    WEB_ASP.Models.DB_Entities _db = new WEB_ASP.Models.DB_Entities();
+    int id = int.Parse(Session["id"].ToString());
+    //Orders _order = _db.Orders.Find(id);
+    var price = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+    int MoiDat = 0;
+    int DaDuyet = 0;
+    int DaHuy = 0;
+    var checkedItems = new List<int>();
+}
+<section class="main">
+    <div class="product-full order-mobile">
+        <div class="grid container">
+            <div class="info-client row">
+                <div class="info-slide col-12 col-md-4">
+                    <div class="list-box">
+                        <ul class="list-box__list">
+                            <li class="list-box__item ">
+                                <a href="@Url.Action("infoCus","infoCustomer")">
+                                    <i class="fa-solid fa-user" s></i> Thông tin tài khoản
+                                </a>
+                            </li>
+                            <li class="list-box__item list-box__item--active">
+                                <a href="#">
+                                    <i class="fa-solid fa-cart-shopping"></i> Đơn đặt hàng
+                                </a>
+                            </li>
+                            <li class="list-box__item">
+                                <a href="@Url.Action("Logout","Account")">
+                                    <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="info-detail col-12 col-md-8">
+                    <div class="order-detail__box">
+
+                        <div class="each-order">
+
+                            @foreach (var item in ViewBag.list)
+                            {
+                                if (item.idstatus == 1)
+                                {
+                                    MoiDat = 1;
+                                }
+                                if (item.idstatus == 2)
+                                {
+                                    DaDuyet = 2;
+                                }
+                                if (item.idstatus == 5)
+                                {
+                                    DaHuy = 5;
+                                }
+
+                                //idOrder.Add(item.IdOrder);
+
+                            }
+
+                            @foreach (var itemcheck in ViewBag.listcheck)
+                            {
+                                if (itemcheck.idstatus == 1 && !checkedItems.Contains(itemcheck.idorder))
+                                {
+                                    <div class="order-detail__box--status">
+                                        <h2 style="margin-top: 20px" class="wait-approval">Đơn hàng đang được đợi duyệt</h2>
+                                    </div>
+
+                                    foreach (var item in ViewBag.list)
+                                    {
+                                        if (item.idstatus == MoiDat && item.IdOrder == itemcheck.idorder)
+                                        {
+                                            <div class="order-detail__box--order">
+                                                <div class="order-detail__box--order__left">
+                                                    <div class="img-order">
+                                                        <img src="~/@item.img" alt="img-order" width="100px">
+                                                    </div>
+                                                    <div class="infor-order">
+                                                        <div>
+                                                            <h4>@item.name</h4>
+                                                            <p>Dòng: @item.category</p>
+                                                            <p>Số lượng: @item.QuantitySale</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="order-detail__box--order__right">
+                                                    <div>
+                                                        <h3>@String.Format(price, "{0:c0}", item.QuantitySale * item.UntiPriceSale)</h3>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    checkedItems.Add(itemcheck.idorder);
+                                    <div class="total-price-order">
+                                        <h2>Tổng tiền</h2>
+                                        <h2>@String.Format(price, "{0:c0}", itemcheck.total_money)</h2>
+                                    </div>
+
+                                    if (MoiDat == 1)
+                                    {
+                                        <div class="cancel-order">
+                                            <a href="~/InfoCustomer/CancalOrder?id=@itemcheck.idorder" class="btn-cancel-order">HUỶ ĐƠN HÀNG</a>
+                                        </div>
+                                    }
+                                }
+
+                                else if ((itemcheck.idstatus == 2 || itemcheck.idstatus == 3) && !checkedItems.Contains(itemcheck.idorder))
+                                {
+                                    <div class="order-detail__box--status">
+                                        <h2 style="margin-top: 20px" class="transport">Đơn hàng đang được giao tới bạn, dự kiến là 2-3 ngày</h2>
+                                    </div>
+                                    foreach (var item in ViewBag.list)
+                                    {
+                                        if (item.idstatus == DaDuyet && item.IdOrder == itemcheck.idorder)
+                                        {
+                                            <div class="order-detail__box--order">
+                                                <div class="order-detail__box--order__left">
+                                                    <div class="img-order">
+                                                        <img src="~/@item.img" alt="img-order" width="100px">
+                                                    </div>
+                                                    <div class="infor-order">
+                                                        <div>
+                                                            <h4>@item.name</h4>
+                                                            <p>Dòng: @item.category</p>
+                                                            <p>Số lượng: @item.QuantitySale</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="order-detail__box--order__right">
+                                                    <div>
+                                                        <h3>@String.Format(price, "{0:c0}", item.QuantitySale * item.UntiPriceSale)</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    <div class="total-price-order">
+                                        <h2>Tổng tiền</h2>
+                                        <h2>@String.Format(price, "{0:c0}", itemcheck.total_money)</h2>
+                                    </div>
+                                    checkedItems.Add(itemcheck.idorder);
+                                }
+
+                                else if (itemcheck.idstatus == 5 && !checkedItems.Contains(itemcheck.idorder))
+                                {
+                                    <div class="order-detail__box--status">
+                                        <h2 style="margin-top: 20px" class="cancel">Đơn hàng đã hủy</h2>
+                                    </div>
+                                    foreach (var item in ViewBag.list)
+                                    {
+                                        if (item.idstatus == DaHuy && item.IdOrder == itemcheck.idorder)
+                                        {
+                                            <div class="order-detail__box--order">
+                                                <div class="order-detail__box--order__left">
+                                                    <div class="img-order">
+                                                        <img src="~/@item.img" alt="img-order" width="100px">
+                                                    </div>
+                                                    <div class="infor-order">
+                                                        <div>
+                                                            <h4>@item.name</h4>
+                                                            <p>Dòng: @item.category</p>
+                                                            <p>Số lượng: @item.QuantitySale</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="order-detail__box--order__right">
+                                                    <div>
+                                                        <h3>@String.Format(price, "{0:c0}", item.QuantitySale * item.UntiPriceSale)</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    <div class="total-price-order">
+                                        <h2>Tổng tiền</h2>
+                                        <h2>@String.Format(price, "{0:c0}", itemcheck.total_money)</h2>
+                                    </div>
+                                    checkedItems.Add(itemcheck.idorder);
+                                }
+
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

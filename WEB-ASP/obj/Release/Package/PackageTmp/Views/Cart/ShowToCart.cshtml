@@ -1,0 +1,189 @@
+﻿@model WEB_ASP.Models.CartModel
+@{
+    ViewBag.Title = "Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var user = Session["UserName"] as WEB_ASP.Models.Account;
+}
+@section handleJavascript{
+    <script src="~/Scripts/controller/Cart.js"></script>
+}
+
+@if (Model != null)
+{
+    <div class="app">
+        <section class="main">
+            <div class="product-full container">
+                <div class="grid">
+                    <form action="CheckOut" method="post" class="cart-form row">
+                        <div class="cart-info col-sm-12 col-md-8">
+                            <div>
+                                <div class="cart-info__detail">
+                                    <div class="container">
+                                        <div class="bag-cart">
+                                            <div class="cart-title">
+                                                <b>GIỎ HÀNG</b>
+                                            </div>
+                                            @foreach (var item in Model.Items)
+                                            {
+                                                <div class="cart-item">
+                                                    <div class="item-img" style="width: 15%;">
+                                                        <a href="#" title="~/Home/Detail?id=@item._shopping_product.IdProduct">
+                                                            <img src="~/@item._shopping_product.Image" width="100px">
+                                                        </a>
+                                                    </div>
+                                                    <div class="row" style="width: 85%;">
+                                                        <div class="item-name  col-12 col-lg-6">
+                                                            <p>
+                                                                <a href="~/Home/Detail?id=@item._shopping_product.IdProduct" class="cart-product-title__name">@item._shopping_product.Name_product</a>
+                                                            </p>
+                                                        </div>
+
+                                                        <div class="item-price col-12 col-lg-2">
+                                                            <b>@string.Format("{0:#,0}", item._shopping_product.Price)₫</b>
+                                                        </div>
+
+                                                        <div class="item-quantity col-12 justify-content-start col-lg-4 justify-content-lg-between">
+                                                            <div class="btn-quantity p">
+                                                                <button type="button" class="cart-product-quantity__item-link" onclick="var result = document.getElementById('qty_' + @item._shopping_product.IdProduct); var qty = result.value; if (!isNaN(qty) & qty > 1) result.value--; return false;">
+                                                                    <i class="minus fa-solid fa-minus"></i>
+                                                                </button>
+
+                                                                <div class="cart-product-quantity__item">
+                                                                    <input type="hidden" value="@item._shopping_product.IdProduct" name="IdProduct" />
+                                                                    <input type="text" data-id="@item._shopping_product.IdProduct" class="txtQuantity" value="@item._cart_quantity" id="qty_@item._shopping_product.IdProduct" size="4" maxlength="3" onkeypress="if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;" onchange="if(this.value == 0)this.value=1;">
+                                                                </div>
+
+                                                                <button type="button" class="cart-product-quantity__item-link" onclick="var result = document.getElementById('qty_' + @item._shopping_product.IdProduct); var qty = result.value; if( !isNaN(qty)) result.value++;return false;">
+                                                                    <i class="plus fa-solid fa-plus"></i>
+                                                                </button>
+                                                            </div>
+
+                                                            <div class="item-remove">
+                                                                <a style="color: red; font-size: 1.8rem; font-weight: 500" href="/Cart/RemoveCart/@item._shopping_product.IdProduct">Xóa</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                              }
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="cart-info__detail-btn" style="margin-top:20px">
+                                        <button type="button" style="margin-right: 20px; color:blue" id="btnUpdate">
+                                            Cập nhật giỏ hàng
+                                        </button>
+
+                                        <button style="color:blue" type="button" onclick="location.href = '@Url.Action("Index", "Home")'">
+                                            Tiếp tục mua sắm
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="cart-info__title">Thông tin người nhận</div>
+
+                            <div class="cart-info__billing">
+                                <h4>Thông tin người dùng</h4>
+
+                                <input class="cart-info__billing-name" type="text" placeholder="Tên" name="NameCus" required>
+
+                                <div class="cart-info__billing-contact">
+                                    <input type="text" placeholder="Số điện thoại" name="phone" required>
+                                    <input type="text" placeholder="Email" name="email">
+                                </div>
+
+                                <h4>Nơi nhận hàng</h4>
+
+                                <input class="cart-info__billing-downtown" type="text" placeholder="Tỉnh, Thành phố" name="city" required>
+
+                                <div class="cart-info__billing-address">
+                                    <input type="text" placeholder="Quận, Huyện" name="district" required>
+                                    <input type="text" placeholder="Tên đường, Số nhà" name="commune" required>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="cart-price col-sm-12 col-md-4">
+                            <div class="cart-price-container">
+                                <div class="cart-price-total">
+                                    <div class="cart-price-total__info">
+                                        <table class="cart-price-total__info-table">
+                                            <tbody>
+                                                <tr class="subtotal">
+                                                    <td>
+                                                        <label>Tổng phụ:</label>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            @*@string.Format("{0:#,0}", Model.Total_Money())₫*@
+                                                            @Model.Total_Money().ToString("#,0##")đ
+                                                        </span>
+                                                    </td>
+                                                </tr>
+
+                                                <tr class="value-summary">
+                                                    <td>
+                                                        <label>Tổng chính:</label>
+                                                    </td>
+                                                    <td>
+                                                        <span> @Model.Total_Money().ToString("#,0##")đ</span>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    <div class="cart-total__oder">
+                                        <div class="cart-policy">
+                                            <input type="checkbox">
+                                        </div>
+                                        <div class="termsofservice">
+                                            <span>Tôi đã đọc và đồng ý với <a href="">điều khoản và điều kiện</a> của websites</span>
+                                        </div>
+                                    </div>
+                                    @if (Session["UserName"] == null || Session["UserName"].ToString() == "")
+                                    {
+                                        <div class="cart-policy__btn">
+                                            <button type="button" onclick="location.href = '@Url.Action("Login", "Account")' ">Tiến hành đặt hàng </button>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="cart-policy__btn">
+                                            <button type="submit">Tiến hành đặt hàng</button>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+}
+else
+{
+    <div class="app" style="height: 600px">
+        <section class="main">
+            <div class="product-full">
+                <div class="grid">
+                    <div style="text-align:center" class="mt-5">
+                        <h1> Bạn chưa thêm sản phẩm nào vào giỏ hàng !</h1>
+                        <a href="~/Home/index" class="btn btn-success" style="font-size: 1.4rem">Trở lại mua hàng</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+}

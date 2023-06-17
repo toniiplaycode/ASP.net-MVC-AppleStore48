@@ -1,0 +1,89 @@
+﻿﻿@model WEB_ASP.Models.Order
+  
+@{
+    ViewBag.Title = "Order_Detail";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    var price = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+
+<main>
+    <h5 class="mt-2 mx-2">
+        <a href="@Url.Action("Order", "OrderAdmin")">
+            <i class="fa-solid fa-circle-left"></i>
+            Quay lại
+        </a>
+    </h5>
+
+    <div class="d-none d-md-block">
+        <table class="table table-hover mx-2" style="text-align: center; vertical-align: baseline;">
+            <thead>
+                <tr>
+                    <th>Tên sản phẩm</th>
+                    <th>Ảnh</th>
+                    <th>Giá</th>
+                    <th>Số lượng</th>
+                    <th>Tổng tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.Detail)
+                {
+                    <tr>
+                        <td style="width: 20%;">
+                            <span>@item.Product.Name_product</span>
+                        </td>
+                        <td>
+                            <img src="~/@item.Product.Image" alt="img-order-detail" style="width: 120px">
+                        </td>
+                        <td>
+                            <span>@String.Format(price, "{0:c0}", item.UntiPriceSale)</span>
+                        </td>
+                        <td>
+                            <span>@item.QuantitySale</span>
+                        </td>
+                        <td>
+                            <span style="font-weight: 500; color: #0066CC">@String.Format(price, "{0:c0}", item.QuantitySale * item.UntiPriceSale)</span>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-block d-md-none">
+        @foreach (var item in ViewBag.Detail)
+        {
+            <div class="each-order-detail">
+                <div class="order-detail-name-img">
+                    <div class="order-detail-name">
+                        <h5>@item.Product.Name_product</h5>
+                    </div>
+                    <div class="order-detail-img">
+                        <img src="~/@item.Product.Image" alt="img-order-detail" style="width: 120px">
+                    </div>
+                </div>
+                <div class="order-detail-price-quantity-total">
+                    <div class="order-detail-price">
+                        <span>Giá: @String.Format(price, "{0:c0}", item.UntiPriceSale)</span>
+                    </div>
+                    <div class="order-detail-quantity">
+                        <span>Số lượng: @item.QuantitySale</span>
+                    </div>
+                    <div class="order-detail-total">
+                        <h5 style="font-weight: 500; color: #0066CC">Tổng: @String.Format(price, "{0:c0}", item.QuantitySale * item.UntiPriceSale)</h5>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+        <h3 class="mx-2 total-order">Tổng đơn: <span style="color: #0066CC; font-weight:700">@String.Format(price, "{0:c0}", ViewBag.Total)</span> </h3>
+        <h5 class="mx-2 mt-5">Tên Khách Hàng: <span style="color: #018576; font-size:20px; font-weight:700">@Model.NameCus</span> </h5>
+        <h5 class="mx-2 mt-2">Số điện thoại: <span style="color: #018576; font-size:20px; font-weight:700"> @Model.Phone</span></h5>
+        <h5 class="mx-2 mt-2">Email:<span style="color: #018576; font-size:20px; font-weight:700"> @Model.Email</span> </h5>
+        <h5 class="mx-2 mt-2" style="margin-bottom: 20px;">Địa chỉ: <span style="color: #018576; font-size:20px; font-weight:700"> @Model.Address_Delivery</span></h5>
+
+
+</main>
+

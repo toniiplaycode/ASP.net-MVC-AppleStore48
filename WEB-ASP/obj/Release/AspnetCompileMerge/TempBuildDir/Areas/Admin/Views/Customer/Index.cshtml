@@ -1,0 +1,95 @@
+﻿@{
+    ViewBag.Title = "Quản lý khách hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main>
+
+    <div class="d-none d-md-block">
+        <table class="table table-hover mx-2" style="text-align: center; vertical-align: baseline;">
+            <thead>
+                <tr>
+                    <th>Họ và tên</th>
+                    <th>Số điện thoại</th>
+                    <th>Email</th>
+                    <th>Địa chỉ</th>
+                    @*<th>Thao tác</th>*@
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in ViewBag.List)
+                {
+                    <tr>
+                        <td>
+                            <span>@item.fullname</span>
+                        </td>
+                        <td>
+                            <span>@item.phone</span>
+                        </td>
+                        <td>
+                            <span>@item.email</span>
+                        </td>
+                        <td>
+                            <span>@item.address</span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-block d-md-none">
+        @foreach (var item in ViewBag.List)
+        {
+            <div class="each-customer">
+                <div class="customer-name">
+                    <span>@item.fullname</span>
+                </div>
+                <div class="customer-number-email-address">
+                    <div class="customer-number">
+                        <span><span style="font-weight: bold">Số điện thoại: </span>@item.phone</span>
+                    </div>
+                    <div class="customer-email">
+                        <span><span style="font-weight: bold">Email: </span>@item.email</span>
+                    </div>
+                    <div class="customer-address">
+                        <span><span style="font-weight: bold">Địa chỉ: </span>@item.address</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="product-full-item-detail__number-page">
+        <ul class="number-page__list">
+            <li class="number-page__item">
+                @if (ViewBag.Page > 1)
+                {
+                    <a href="@Url.Action("", new {page = ViewBag.Page - 1, type = ViewBag.type})"
+                        class="number-page__item-link">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                }
+            </li>
+            @for (int i = 1; i <= ViewBag.MaxPage; i++)
+            {
+                <li class="number-page__item">
+                    <a href="@Url.Action("", new {page = i, type = ViewBag.type})" class="number-page__item-link @Html.Raw(ViewBag.Page == i ? " number-page__item-link--active" : "")">
+                        @i
+                    </a>
+                </li>
+            }
+            <li class="number-page__item">
+                @if (ViewBag.Page < ViewBag.MaxPage)
+                {
+                    <a href="@Url.Action("", new {page = ViewBag.Page + 1, type = ViewBag.type})"
+                        class="number-page__item-link">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                }
+            </li>
+        </ul>
+    </div>
+</main>
+

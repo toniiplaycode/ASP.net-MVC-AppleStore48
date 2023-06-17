@@ -1,0 +1,187 @@
+﻿﻿@model IEnumerable<WEB_ASP.Models.Product>
+
+@{
+    ViewBag.Title = "Sound";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="main">
+    <article class="product-full">
+        <div class="grid">
+            <h1 class="product-full__tile">Sounds</h1>
+            <article class="product-full__banner container">
+                <div class="slider">
+                    <div class="slider-prev">
+                        <i class="fa fa-angle-left slider-prev__icon"></i>
+                    </div>
+                    <ul class="slider-dots">
+                        <li class="slider-dot-item active" data-index="0"></li>
+                        <li class="slider-dot-item" data-index="1"></li>
+                    </ul>
+                    <div class="slider-wrapper">
+                        <div class="slider-main">
+                            <div class="banner__item">
+                                <a class="banner__item-link" href="" target="_blank"><img class="banner__item-img" src="~/asset/img/BANNER/Sounds/danh mục loa t4-2.jpeg" alt="banner"></a>
+                            </div>
+                            <div class="banner__item">
+                                <a class="banner__item-link" href="" target="_blank"><img class="banner__item-img" src="~/asset/img/BANNER/Sounds/hero-banner-airpods.image.large_2x.jpg" alt="banner"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slider-next">
+                        <i class="fa fa-angle-right slider-next__icon"></i>
+                    </div>
+                </div>
+            </article>
+
+            <article class="product-sort container">
+                <ul class="product-list">
+                    <li class="product-list__item product-item--active">
+                        <a href="~/Home/Sound" class="product-list__link @Html.Raw(ViewBag.type == null ? "product-item__link--active" : "")">Tất cả</a>
+                    </li>
+                    <li class="product-list__item">
+                        <a href="~/Home/Sound?type=airPods" class="product-list__link @Html.Raw(ViewBag.type == "airPods" ? "product-item__link--active" : "")">AirPods</a>
+                    </li>
+                    <li class="product-list__item">
+                        <a href="~/Home/Sound?type=airPods pro" class="product-list__link @Html.Raw(ViewBag.type == "airPods pro" ? "product-item__link--active" : "")">AirPods Pro</a>
+                    </li>
+                    <li class="product-list__item">
+                        <a href="~/Home/Sound?type=earPods" class="product-list__link @Html.Raw(ViewBag.type == "earPods" ? "product-item__link--active" : "")">EarPods</a>
+                    </li>
+                    <li class="product-list__item">
+                        <a href="~/Home/Sound?type=airPods max" class="product-list__link @Html.Raw(ViewBag.type == "airPods max" ? "product-item__link--active" : "")">AirPods Max</a>
+                    </li>
+                </ul>
+                <form action="#" method="post">
+                    <select class="product-sorting" onchange="handleFilter(value);">
+                        <option value="" @Html.Raw(ViewBag.filterSelect == null ? "selected " : "")>Thứ tự hiển thị</option>
+                        <option value="1" @Html.Raw(ViewBag.filterSelect == 1 ? "selected " : "")>Giá cao đến thấp</option>
+                        <option value="2" @Html.Raw(ViewBag.filterSelect == 2 ? "selected " : "")>Giá thấp đến cao</option>
+                    </select>
+                </form>
+            </article>
+
+            <article class="product-full-item-detail container">
+                <div class="row">
+                    @foreach (var product in Model)
+                    {
+                        <div class="col-6 col-sm-4 col-md-3 mb-4 mt-3">
+                            <div class="home-product-item">
+                                <div class="home-product__img">
+                                    <a class="home-product__img-link" href="~/Home/Detail?id=@product.IdProduct">
+                                        <img src="~/@product.Image" />
+                                    </a>
+                                </div>
+                                <div class="home-product__detail">
+                                    <h3 class="home-product__detail-name"><a href="">@product.Name_product</a></h3>
+                                    <div class="home-product__detail-price">
+                                        <span class="home-product__detail-price-new">@string.Format("{0:#,0}", product.Price)₫</span>
+                                        <span class="home-product__detail-price-old">@string.Format("{0:#,0}", product.Discount)₫</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="product-full-item-detail__number-page">
+                    <ul class="number-page__list">
+                        <li class="number-page__item">
+                            @if (ViewBag.Page > 1)
+                            {
+                                <a href="@Url.Action("Mac", new { page = ViewBag.Page - 1, filterSelect = ViewBag.filterSelect != null ? ViewBag.filterSelect : "" })"
+                                   class="number-page__item-link">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </a>
+                            }
+                        </li>
+                        @for (int i = 1; i <= ViewBag.MaxPage; i++)
+                        {
+                            <li class="number-page__item">
+                                <a href="@Url.Action("Mac", new {page = i})" class="number-page__item-link @Html.Raw(ViewBag.Page == i ? " number-page__item-link--active" : "")">
+                                    @i
+                                </a>
+                            </li>
+                        }
+                        <li class="number-page__item">
+                            @if (ViewBag.Page < ViewBag.MaxPage)
+                            {
+                                <a href="@Url.Action("Mac", new { page = ViewBag.Page + 1, filterSelect = ViewBag.filterSelect != null ? ViewBag.filterSelect : "" })"
+                                   class="number-page__item-link">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </a>
+                            }
+                        </li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="product-full-description">
+                <div class="product-full-description__container container">
+                    <div class="product-full-description__item">
+                        <h1 class="product-full-description__item-title">Thiết bị âm thanh - Mang lại trải nghiệm nghe nhạc cực đã</h1>
+                        <div class="product-full-description__item-detail">
+                            <p>
+                                Nghe nhạc, xem phim là nhu cầu thường ngày trong cuộc sống, giúp chúng ta thư giãn sau quãng thời gian học tập và làm việc căng thẳng. Tuy nhiên, để nâng cao trải nghiệm và có được những giây phút giải trí ấn tượng hơn, người dùng nên mua những thiết bị âm thanh chuyên dụng.
+                            </p>
+                            <br>
+                            <p>
+                                Dòng sản phẩm này chạy hệ điều hành watchOS, tương thích với iOS và các sản phẩm dịch vụ khác của Apple, kết nối không dây với iPhone thông qua kết nối Bluetooth hoặc Wifi..
+                            </p>
+                        </div>
+                    </div>
+                    <div class="product-full-description__item">
+                        <h1 class="product-full-description__item-title">Các thiết bị âm thanh hiện đại đang có mặt tại ShopDunk?</h1>
+                        <div class="product-full-description__item-detail">
+                            <p>
+                                Tai nghe dây dành riêng cho các sản phẩm Apple, kết nối với thiết bị thông qua jack cắm lightning.
+                                Điểm nổi bật: đầu tai nghe nhỏ, áp sát, nằm gọn trong tai, tăng giảm âm lượng với nút bấm dễ dàng, chiều dài dây tai nghe 1.2m, dễ dàng kết nối và nghe nhạc với điện thoại bỏ trong túi hoặc balo.
+                            </p>
+                            <p>
+                                Các sản phẩm tai nghe dây tiêu biểu tại ShopDunk đến từ thương hiệu Earpods của Apple, tối ưu hóa về chất lượng âm thanh, mang lại những bản nhạc có chất âm rõ ràng, trung thực và sâu lắng.
+                            </p>
+                            <br>
+                            <p>
+                                Tai nghe sử dụng giao tiếp Bluetooth để kết nối không dây với các thiết bị di động, rất thuận tiện cho những người thường xuyên di chuyển.
+                                Điểm nổi bật: thiết kế tinh tế, toát lên vẻ thời trang, tích hợp công nghệ loại bỏ tiếng ồn, truyền tải âm thanh chân thực, hỗ trợ micro cho phép đàm thoại rảnh tay (không cần đụng đến điện thoại),  nhỏ gọn, dễ dàng mang theo mọi nơi. Thiết kế hiện đại, kiểu dáng hợp thời trang, thể hiện được cá tính của người trẻ, cộng với màu sắc thu hút, đang là những điểm mạnh thu hút nhiều người dùng chuyển từ tai nghe dây sang tai nghe Bluetooth bất chấp giá cả có phần cao hơn.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="product-full-description__item">
+                        <h1 class="product-full-description__item-title">Tại sao người dùng cần đến sự hỗ trợ của các thiết bị âm thanh?</h1>
+                        <div class="product-full-description__item-detail">
+                            <p>
+                                Nghe nhạc, xem phim với âm thanh không chỉ chân thực, sống động hơn, gia tăng sự thoải mái mà còn trong trẻo, rõ ràng, âm bass chi tiết.
+                            </p>
+                            <br>
+                            <p>
+                                Các sản phẩm tai nghe duy trì sự riêng tư, mang lại trải nghiệm cá nhân thêm phần ấn tượng.
+                            </p>
+                            <br>
+                            <p>
+                                Nhiều loại mang tính di động cao, dễ dàng mang theo bên mình khi di chuyển.
+                            </p>
+                            <br>
+                            <p>
+                                Tích hợp nhiều công nghệ, tính năng hiện đại và hữu ích.
+                            </p>
+                            <br>
+                            <p>
+                                Những loại tai nghe Bluetooth được chú trọng về kiểu dáng thiết kế cũng như màu sắc, tạo nên sự thời thượng, phù hợp phong cách giới trẻ
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="read-more-link"></div>
+            </article>
+        </div>
+    </article>
+</section>
+
+@section handleJavascript{
+    <script>
+        var handleFilter = (value) => {
+            console.log(value);
+            location.href = `/Home/Sound?filterSelect=${value}`;
+        }
+    </script>
+}

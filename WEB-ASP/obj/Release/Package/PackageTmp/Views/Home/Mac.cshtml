@@ -1,0 +1,195 @@
+﻿﻿@model IEnumerable<WEB_ASP.Models.Product>
+
+@{
+    ViewBag.Title = "Mac";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="main">
+    <article class="product-full">
+        <div class="grid">
+            <h1 class="product-full__tile">Mac</h1>
+            <article class="product-full__banner container">
+                <div class="slider">
+                    <div class="slider-prev">
+                        <i class="fa fa-angle-left slider-prev__icon"></i>
+                    </div>
+                    <ul class="slider-dots">
+                        <li class="slider-dot-item active" data-index="0"></li>
+                        <li class="slider-dot-item" data-index="1"></li>
+                        <li class="slider-dot-item" data-index="2"></li>
+                        <li class="slider-dot-item" data-index="3"></li>
+                    </ul>
+                    <div class="slider-wrapper">
+                        <div class="slider-main">
+                            <div class="banner__item">
+                                <a class="banner__item-link" href="" target="_blank"><img class="banner__item-img" src="~/asset/img/BANNER/Mac/banner macbook air t5_Banner PC.jpeg" alt="banner"></a>
+                            </div>
+                            <div class="banner__item">
+                                <a class="banner__item-link" href="" target="_blank"><img class="banner__item-img" src="~/asset/img/BANNER/Mac/Copy of banner mac2-03.jpeg" alt="banner"></a>
+                            </div>
+                            <div class="banner__item">
+                                <a class="banner__item-link" href="" target="_blank"><img class="banner__item-img" src="~/asset/img/BANNER/Mac/danh mục iphone ipad t4-12.jpeg" alt="banner"></a>
+                            </div>
+                            <div class="banner__item">
+                                <a class="banner__item-link" href="" target="_blank"><img class="banner__item-img" src="~/asset/img/BANNER/Mac/danh mục iphone ipad t4-14.jpeg" alt="banner"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slider-next">
+                        <i class="fa fa-angle-right slider-next__icon"></i>
+                    </div>
+                </div>
+            </article>
+
+            <article class="product-sort container">
+                <ul class="product-list">
+                    <li class="product-list__item product-item--active">
+                        <a href="~/Home/Mac" class="product-list__link @Html.Raw(ViewBag.type == null ? "product-item__link--active" : "")">Tất cả</a>
+                    </li>
+                    <li class="product-list__item">
+                        <a href="~/Home/Mac?type=macbook pro" class="product-list__link @Html.Raw(ViewBag.type == "macbook pro" ? "product-item__link--active" : "")">Macbook Pro</a>
+                    </li>
+                    <li class="product-list__item">
+                        <a href="~/Home/Mac?type=macbook air" class="product-list__link @Html.Raw(ViewBag.type == "macbook air" ? "product-item__link--active" : "")">Macbook Air</a>
+                    </li>
+                    <li class="product-list__item">
+                        <a href="~/Home/Mac?type=imac" class="product-list__link @Html.Raw(ViewBag.type == "imac" ? "product-item__link--active" : "")">iMac</a>
+                    </li>
+                    <li class="product-list__item">
+                        <a href="~/Home/Mac?type=mac mini" class="product-list__link @Html.Raw(ViewBag.type == "mac mini" ? "product-item__link--active" : "")">Mac Mini</a>
+                    </li>
+                </ul>
+                <form action="#" method="post">
+                    <select class="product-sorting" onchange="handleFilter(value);">
+                        <option value="" @Html.Raw(ViewBag.filterSelect == null ? "selected " : "")>Thứ tự hiển thị</option>
+                        <option value="1" @Html.Raw(ViewBag.filterSelect == 1 ? "selected " : "")>Giá cao đến thấp</option>
+                        <option value="2" @Html.Raw(ViewBag.filterSelect == 2 ? "selected " : "")>Giá thấp đến cao</option>
+                    </select>
+                </form>
+            </article>
+
+            <article class="product-full-item-detail container">
+                <div class="row">
+                    @foreach (var product in Model)
+                    {
+                        <div class="col-6 col-sm-4 col-md-3 mb-4 mt-3">
+                            <div class="home-product-item">
+                                <div class="home-product__img">
+                                    <a class="home-product__img-link" href="~/Home/Detail?id=@product.IdProduct">
+                                        <img src="~/@product.Image" />
+                                    </a>
+                                </div>
+                                <div class="home-product__detail">
+                                    <h3 class="home-product__detail-name"><a href="">@product.Name_product</a></h3>
+                                    <div class="home-product__detail-price">
+                                        <span class="home-product__detail-price-new">@string.Format("{0:#,0}", product.Price)₫</span>
+                                        <span class="home-product__detail-price-old">@string.Format("{0:#,0}", product.Discount)₫</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="product-full-item-detail__number-page">
+                    <ul class="number-page__list">
+                        <li class="number-page__item">
+                            @if (ViewBag.Page > 1)
+                            {
+                                <a href="@Url.Action("Mac", new { page = ViewBag.Page - 1, filterSelect = ViewBag.filterSelect != null ? ViewBag.filterSelect : "" })"
+                                   class="number-page__item-link">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </a>
+                            }
+                        </li>
+                        @for (int i = 1; i <= ViewBag.MaxPage; i++)
+                        {
+                            <li class="number-page__item">
+                                <a href="@Url.Action("Mac", new {page = i})" class="number-page__item-link @Html.Raw(ViewBag.Page == i ? " number-page__item-link--active" : "")">
+                                    @i
+                                </a>
+                            </li>
+                        }
+                        <li class="number-page__item">
+                            @if (ViewBag.Page < ViewBag.MaxPage)
+                            {
+                                <a href="@Url.Action("Mac", new { page = ViewBag.Page + 1, filterSelect = ViewBag.filterSelect != null ? ViewBag.filterSelect : "" })"
+                                   class="number-page__item-link">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </a>
+                            }
+                        </li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="product-full-description">
+                <div class="product-full-description__container container">
+                    <div class="product-full-description__item">
+                        <h1 class="product-full-description__item-title">Giới thiệu về Apple Mac</h1>
+                        <div class="product-full-description__item-detail">
+                            <p>
+                                Apple Mac là dòng máy tính của thương hiệu Apple Inc. phổ biến trên toàn thế giới và được đông đảo người dùng yêu thích.
+                                Tính đến thời điểm hiện tại, Apple mang đến cho người dùng 5 dòng sản phẩm về Mac, đó là: MacBook, iMac, Mac mini,
+                                Mac Pro, Mac Studio và Displays. Đây đều là những sản phẩm vô cùng nổi tiếng trên thị trường và mang đến
+                                cho người dùng những trải nghiệm vô cùng tuyệt vời.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="product-full-description__item">
+                        <h1 class="product-full-description__item-title">Giới thiệu về MacBook</h1>
+                        <div class="product-full-description__item-detail">
+                            <p>
+                                MacBook là dòng máy tính xách tay của Apple Inc. sản xuất và phát triển. Đặc trưng của dòng này là thiết kế sang trọng cùng trải nghiệm mượt mà, mà nó đem lại nhờ chạy hệ điều hành macOS – hệ điều hành do chính Apple phát triển.
+                            </p>
+                            <br>
+                            <p>
+                                MacBook có 2 dòng sản phẩm chính là MacBook Air và MacBook Pro. Ngoài ra, Apple còn phát triển thêm dòng MacBook M1 sử dụng con chip Apple Silicon M1 do chính Apple sản xuất (trước đó họ sử dụng chip Intel hoặc AMD – một bên thứ 3 cung cấp chipset CPU).
+                            </p>
+                        </div>
+                    </div>
+                    <div class="product-full-description__item">
+                        <h1 class="product-full-description__item-title">Giới thiệu về iMac</h1>
+                        <div class="product-full-description__item-detail">
+                            <p>
+                                iMac đã nhận được sự hoan nghênh quan trọng đáng kể, bao gồm cả lời khen ngợi từ chuyên gia công nghệ Walt Mossberg là “Tiêu chuẩn vàng của máy tính để bàn”; Tạp chí Forbes mô tả dòng máy tính iMac màu kẹo ban đầu là một “thành công thay đổi ngành công nghiệp”
+                            </p>
+                            <br>
+                            <p>
+                                Sau hơn 20 năm cho ra mắt, iMac ngày càng được nâng cấp và tối ưu đế mỏng, nhẹ và tích hợp nhiều thứ hơn. Nếu như phiên bản năm 1998 được trang bị màn hình CRT với kích thước 14 inch thì cho đến hiện tại, kích thước iMac phiên bản 2021 có kích thước lên đến
+                                24 inch với độ phân giải tối đa 5K cùng sự mạnh mẽ nhờ được tích hợp chip Apple M1.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="product-full-description__item">
+                        <h1 class="product-full-description__item-title">ShopDunk cung cấp những dòng iPad nào ?</h1>
+                        <div class="product-full-description__item-detail">
+                            <p>
+                                ShopDunk là đại lý uỷ quyền Apple tại Việt Nam với hệ thống 40 cửa hàng trên toàn quốc, trong đó có 11 Mono Store.
+                                Đến nay, ShopDunk đã trở thành điểm dừng chân lý tưởng cho iFans nói chung và thế hệ GenZ nói riêng bởi độ chuẩn
+                                và chất. Không gian thiết kế và bài trí sản phẩm theo tiêu chuẩn của Apple, chia theo từng khu vực rõ ràng, bàn trải
+                                nghiệm rộng rãi và đầy đủ sản phẩm.
+                            </p>
+                            <br>
+                            <p>
+                                Tại ShopDunk luôn có mức giá tốt nhất cho người dùng cùng với nhiều chương trình hấp dẫn diễn ra liên tục trong tháng.
+                                Hãy đến với chúng tôi và trải nghiệm ngay những mẫu iPad mới nhất với đội ngũ chuyên viên tư vấn được đào tạo bài bản từ
+                                Apple, sẵn sàng hỗ trợ bạn về sản phẩm, kỹ thuật hay các công nghệ mới nhất từ Apple.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="read-more-link"></div>
+            </article>
+        </div>
+    </article>
+</section>
+
+@section handleJavascript{
+    <script>
+        var handleFilter = (value) => {
+            console.log(value);
+            location.href = `/Home/Mac?filterSelect=${value}`;
+        }
+    </script>
+}

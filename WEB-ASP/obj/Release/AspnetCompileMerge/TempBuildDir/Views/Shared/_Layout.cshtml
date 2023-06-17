@@ -1,0 +1,362 @@
+﻿﻿
+@{
+    var user = Session["UserName"] as WEB_ASP.Models.Account;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title | Shop 48-ASP.NET</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/asset/icon/themify-icons/themify-icons.css">
+
+    <link rel="stylesheet" href="~/asset/css/base.css">
+    <link rel="stylesheet" href="~/asset/css/style.css">
+    <link rel="icon" type="image/x-icon" href="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="app">
+        <header class="header-pc d-none d-sm-none d-md-block">
+            <div class="header__fullscreen-pc">
+                <div class="header__logo">
+                    <a href="@Url.Action("Index","Home")">
+                        <img alt="ShopDunk" src="~/asset/img/logo.png">
+                    </a>
+                </div>
+
+                <div class="header__menu">
+                    <ul class="header__menu-list">
+                        <li class="header__menu-list-item">
+                            <a class="header__menu-link" href="@Url.Action("Iphone","Home")">iPhone</a>
+                        </li>
+                        <li class="header__menu-list-item">
+                            <a class="header__menu-link" href="@Url.Action("Ipad","Home")">iPad</a>
+                        </li>
+                        <li class="header__menu-list-item">
+                            <a class="header__menu-link" href="@Url.Action("Mac","Home")">Mac</a>
+                        </li>
+                        <li class="header__menu-list-item">
+                            <a class="header__menu-link" href="@Url.Action("Watch","Home")">Watch</a>
+                        </li>
+                        <li class="header__menu-list-item">
+                            <a class="header__menu-link" href="@Url.Action("Sound","Home")">Sound</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="header__links-wrapper">
+                    <div class="header__search">
+                        <a class="header__search-link js-modal-search-icon" href="#">
+                            <i class="header-icon ti-search"></i>
+                        </a>
+                        <!-- Modal search start -->
+                        <div class="modal-search js-modal-search">
+                            <div class="modal-container js-modal-container">
+                                <form class="search-box" action="~/Home/Search" method="get">
+                                    <input class="search-box__text" type="text" name="search" placeholder="Tìm kiếm sản phẩm">
+                                    <button class="search-box__btn" type="submit"></button>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- Modal search end -->
+                    </div>
+                    <div class="header__cart">
+                        <a class="header__search-link" href="@Url.Action("ShowToCart","Cart")">
+                            <i class="header-icon ti-bag"></i>
+                            <span class="header__cart-number">
+                                @Html.Action("BagCart", "Cart")
+                            </span>
+                        </a>
+                    </div>
+
+
+                    @if (Session["UserName"] == null || Session["UserName"].ToString() == "")
+                    {
+                        <div class="header__user">
+                            <a class="header__search-link" href="@Url.Action("Login","Account")">
+                                <i class="header-icon ti-user"></i>
+                            </a>
+                            <div class="header__user-navbar">
+                                <ul class="header__user-navbar-list">
+                                    @* register *@
+                                    <li class="header__user-item">
+                                        @Html.ActionLink("Tạo tài khoản ngay", "Register", "Account")
+                                    </li>
+                                    @* login *@
+                                    <li class="header__user-item">
+                                        @Html.ActionLink("Đăng nhập", "Login", "Account")
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        ViewBag.Username = Session["UserName"].ToString();
+                        <div class="header__user">
+                            <a class="header__search-link" href="#" style="display: flex">
+                                <i class="header-icon ti-user">
+                                </i>
+                                <span style="color: goldenrod; font-size: 2rem; padding: 23px 16px; ">
+                                    @ViewBag.UserName
+                                </span>
+                            </a>
+                            <div class="header__user-navbar" style="margin-top: -10px">
+                                <ul class="header__user-navbar-list">
+                                    <li class="header__user-item">
+                                        <a href="@Url.Action("infoCus", "infoCustomer")">Thông tin người dùng</a>
+                                    </li>
+                                    <li class="header__user-item">
+                                        <a href="@Url.Action("OrderCustomer", "infoCustomer")">Đơn hàng</a>
+                                    </li>
+                                    @* log out *@
+                                    <li class="header__user-item">
+                                        <a href="@Url.Action("Logout", "Account")">Đăng xuất</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </header>
+
+        <header class="header-mobile d-block d-sm-block d-md-none">
+            <div class="header-top">
+                <div class="header__user-mobile">
+                    @if (Session["UserName"] != null)
+                    {
+                        <a class="header__search-link" href="@Url.Action("infoCus","infoCustomer")">
+                            <i class="header-icon ti-user"></i>
+                            <span style="color: goldenrod; font-size: 2rem; padding: 23px 0; ">
+                                @ViewBag.UserName
+                            </span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="header__search-link" href="@Url.Action("Login","Account")">
+                            <i class="header-icon ti-user"></i>
+                        </a>
+                    }
+                </div>
+                <div class="header__logo">
+                     <a href="@Url.Action("Index","Home")">
+                        <img alt="ShopDunk" src="~/asset/img/logo.png">
+                    </a>
+                </div>
+                <div class="header__links-wrapper-mobile">
+                    <div class="header__search">
+                        <a class="header__search-link js-modal-search-icon" href="#">
+                            <i class="header-icon ti-search"></i>
+                        </a>
+                        <!-- Modal search start -->
+                        <div class="modal-search js-modal-search">
+                            <div class="modal-container js-modal-container">
+                                <form class="search-box" action="~/Home/Search" method="get">
+                                    <input class="search-box__text" type="text" name="search" placeholder="Tìm kiếm sản phẩm">
+                                    <button class="search-box__btn" type="submit">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- Modal search end -->
+                    </div>
+                    <div class="header__cart">
+                        <a class="header__search-link" href="@Url.Action("ShowToCart","Cart")">
+                            <i class="header-icon ti-bag"></i>
+                            <span class="header__cart-number">
+                                @Html.Action("BagCart", "Cart")
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="header-bottom">
+                <div class="header__menu">
+                    <ul class="header__menu-list-mobile">
+                        <li class="header__menu-list-item-mobile">
+                            <a class="header__menu-link-mobile" href="@Url.Action("Iphone","Home")">iPhone</a>
+                        </li>
+                        <li class="header__menu-list-item-mobile">
+                            <a class="header__menu-link-mobile" href="@Url.Action("Ipad","Home")">iPad</a>
+                        </li>
+                        <li class="header__menu-list-item-mobile">
+                            <a class="header__menu-link-mobile" href="@Url.Action("Mac","Home")">Mac</a>
+                        </li>
+                        <li class="header__menu-list-item-mobile">
+                            <a class="header__menu-link-mobile" href="@Url.Action("Watch","Home")">Watch</a>
+                        </li>
+                        <li class="header__menu-list-item-mobile">
+                            <a class="header__menu-link-mobile" href="@Url.Action("Sound","Home")">Sound</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        @RenderBody()
+
+        <footer>
+            <div class="grid container">
+                <div class="row row-cols-2 row-cols-sm-3 row-cols-md-5">
+                    <div class="col mb-3">
+                        <h3 class="footer__heading">Thành viên nhóm 48</h3>
+                        <ul class="footer-list">
+                            <li class="footer-item">
+                                <span class="footer-item__link">
+                                    Phan Thanh Trí
+                                </span>
+                            </li>
+                            <li class="footer-item">
+                                <span class="footer-item__link">
+                                    Lê Thanh Toàn
+                                </span>
+                            </li>
+                            <li class="footer-item">
+                                <span class="footer-item__link">
+                                    Huỳnh Ngọc Tỷ
+                                </span>
+                            </li>
+                            <li class="footer-item">
+                                <span class="footer-item__link">
+                                    Phạm Huy Đạt
+                                </span>
+                            </li>
+                            <li class="footer-item">
+                                <span class="footer-item__link">
+                                    Phạm Quang Mẫn
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col mb-3">
+                        <h5 class="footer__heading">GV phụ trách</h5>
+                        <ul class="footer-list">
+                            <li class="footer-item">
+                                <a href="#" class="footer-item__link">
+                                    Thầy Võ Hải Đăng
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col mb-3">
+                        <h3 class="footer__heading">Công nghệ sử dụng</h3>
+                        <ul class="footer-list">
+                            <li class="footer-item">
+                                <a href="#" class="footer-item__link">
+                                    HTML 5
+                                </a>
+                            </li>
+                            <li class="footer-item">
+                                <a href="#" class="footer-item__link">
+                                    CSS 3
+                                </a>
+                            </li>
+                            <li class="footer-item">
+                                <a href="#" class="footer-item__link">
+                                    Boostrap 5
+                                </a>
+                            </li>
+                            <li class="footer-item">
+                                <a href="#" class="footer-item__link">
+                                    Javascript ES6
+                                </a>
+                            </li>
+                            <li class="footer-item">
+                                <a href="#" class="footer-item__link">
+                                    Jquery 3
+                                </a>
+                            </li>
+                            <li class="footer-item">
+                                <a href="#" class="footer-item__link">
+                                    ASP.net MVC 5
+                                </a>
+                            </li>
+                            <li class="footer-item">
+                                <a href="#" class="footer-item__link">
+                                    Microsoft SQL server
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col mb-3">
+                        <h3 class="footer__heading">
+                            Giới thiệu
+                        </h3>
+                        <p class="footer-intro">Project này được tạo nên từ các thành viên tâm huyết ngày đêm trong vòng hơn 1 tháng để hoàn thành. Và mọi thành viên đều đã làm rất tốt.</p>
+                    </div>
+                    <div class="col mb-3">
+                        <h3 class="footer__heading">Danh mục</h3>
+                        <ul class="footer-list">
+                            <li class="footer-item">
+                                <a href="#" class="footer-item__link">
+                                    iPhone
+                                </a>
+                            </li>
+                            <li class="footer-item">
+                                <a href="#" class="footer-item__link">
+                                    iPad
+                                </a>
+                            </li>
+                            <li class="footer-item">
+                                <a href="#" class="footer-item__link">
+                                    Mac
+                                </a>
+                            </li>
+                            <li class="footer-item">
+                                <a href="#" class="footer-item__link">
+                                    Watch
+                                </a>
+                            </li>
+                            <li class="footer-item">
+                                <a href="#" class="footer-item__link">
+                                    Âm thanh
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="~/asset/main.js" asp-append-version="true"></script>
+    <script src="~/Scripts/controller/Cart.js" asp-append-version="true"></script>
+
+    @*<script src="~/Scripts/controller/main.js"></script>*@
+
+    @RenderSection("handleJavascript", false)
+
+    <script>
+        // active header
+        const getAllItem = document.querySelectorAll('.header__menu-list-item > a');
+        let urlCurrent = window.location.href;
+        if (urlCurrent.includes("Iphone") || urlCurrent.includes("iphone")) {
+            getAllItem[0].classList.add("active-page");
+        }
+        if (urlCurrent.includes("Ipad") || urlCurrent.includes("ipad")) {
+            getAllItem[1].classList.add("active-page");
+        }
+        if (urlCurrent.includes("Mac") || urlCurrent.includes("mac")) {
+            getAllItem[2].classList.add("active-page");
+        }
+        if (urlCurrent.includes("Watch") || urlCurrent.includes("watch")) {
+            getAllItem[3].classList.add("active-page");
+        }
+        if (urlCurrent.includes("Sound") || urlCurrent.includes("sound")) {
+            getAllItem[4].classList.add("active-page");
+        }
+    </script>
+
+</body>
+</html>

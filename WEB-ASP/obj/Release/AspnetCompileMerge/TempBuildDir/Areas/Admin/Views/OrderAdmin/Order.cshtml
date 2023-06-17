@@ -1,0 +1,219 @@
+﻿﻿@model IEnumerable<WEB_ASP.Models.Order>
+
+@{
+    ViewBag.Title = "Order";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<main>
+    <div class="d-none d-xl-block">
+        <table class="table table-hover mx-2" style="text-align: center; vertical-align: baseline;">
+            <thead>
+                <tr>
+                    <th>Thời gian đặt</th>
+                    <th>Tên người nhận</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th>Email</th>
+                    <th>Trạng thái</th>
+                    <th>Tổng đơn</th>
+                    <th>Chi tiết đơn hàng</th>
+                    <th>Duyệt đơn</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <span>@String.Format("{0:MM/dd/yyyy}", item.OrderDate)</span>
+                        </td>
+                        <td>
+                            <span>@item.NameCus</span>
+                        </td>
+                        <td>
+                            <span>@item.Phone</span>
+                        </td>
+                        <td>
+                            <span>@item.Address_Delivery</span>
+                        </td>
+                        <td>
+                            <span>@item.Email</span>
+                        </td>
+                        <td>
+                            @* check Idstatus *@
+                            @if (item.Idstatus == 1)
+                            {
+                                <span>Mới đặt</span>
+                            }
+                            else if (item.Idstatus == 2)
+                            {
+                                <span>Đã duyệt</span>
+                            }
+                            else if (item.Idstatus == 5)
+                            {
+                                <span>Đã hủy</span>
+                            }
+                        </td>
+
+                        <td>
+                            <span>
+                                @string.Format("{0:#,0}", item.Total_Money)₫
+                            </span>
+                        </td>
+                        <td>
+                            <a href="~/Admin/OrderAdmin/Order_Detail?id=@item.IdOrder" class="btn btn-info">Xem</a>
+                        </td>
+                        <td>
+                            @* check Idstatus *@
+                            @if (item.Idstatus == 1) // moi duyet
+                            {
+                                <a href="~/Admin/OrderAdmin/OrderBrowsing?id=@item.IdOrder" class="btn btn-primary" style="margin-bottom: 6px;">Duyệt</a>
+                                <a onclick="btnCancalOrder(@item.IdOrder)" class="btn btn-danger">Huỷ</a>
+                            }
+                            else if (@item.Idstatus == 5) // da huy
+                            {
+                                <a href="~/Admin/OrderAdmin/DeleteOrder?id=@item.IdOrder" class="btn btn-danger">Xoá</a>
+                            }
+                            else
+                            {
+                                <p>Xong</p>
+                            }
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-block d-xl-none">
+        @foreach (var item in Model)
+        {
+            <div class="order-detail">
+                <a href="~/Admin/OrderAdmin/Order_Detail?id=@item.IdOrder" class="btn btn-info">Xem chi tiết</a>
+            </div>
+            <div class="each-order">
+                <div class="order-time-name">
+                    <div class="order-time">
+                        <span>@String.Format("{0:MM/dd/yyyy}", item.OrderDate)</span>
+                    </div>
+                    <div class="order-name">
+                        <span>@item.NameCus</span>
+                    </div>
+                </div>
+                <div class="order-info">
+                    <div class="order-number-address-email-status">
+                        <div class="order-number">
+                            <span>Số điện thoại: </span>
+                            <span>@item.Phone</span>
+                        </div>
+                        <div class="order-address">
+                            <span>Địa Chỉ: </span>
+                            <span>@item.Address_Delivery</span>
+                        </div>
+                        <div class="order-email">
+                            <span>Email: </span>
+                            <span>@item.Email</span>
+                        </div>
+                        <div class="order-status">
+                            <span>Trạng thái: </span>
+                            @if (item.Idstatus == 1)
+                            {
+                                <span>Mới đặt</span>
+                            }
+                            else if (item.Idstatus == 2)
+                            {
+                                <span>Đã duyệt</span>
+                            }
+                            else if (item.Idstatus == 5)
+                            {
+                                <span>Đã hủy</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="order-total-action">
+                        <div class="order-total">
+                            <h5>Tổng đơn: @string.Format("{0:#,0}", item.Total_Money)₫</h5>
+                        </div>
+                        <div class="order-action">
+                            @if (item.Idstatus == 1) // moi duyet
+                            {
+                                <a href="~/Admin/OrderAdmin/OrderBrowsing?id=@item.IdOrder" class="btn btn-primary">Duyệt</a>
+                                <a onclick="btnCancalOrder(@item.IdOrder)" class="btn btn-danger">Huỷ</a>
+                            }
+                            else if (@item.Idstatus == 5) // da huy
+                            {
+                                <a href="~/Admin/OrderAdmin/DeleteOrder?id=@item.IdOrder" class="btn btn-danger">Xoá</a>
+                            }
+                            else
+                            {
+                                <h4>Xong</h4>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="product-full-item-detail__number-page">
+        <ul class="number-page__list">
+            <li class="number-page__item">
+                @if (ViewBag.Page > 1)
+                {
+                    <a href="@Url.Action("/Order", new {page = ViewBag.Page - 1, type = ViewBag.type})"
+                       class="number-page__item-link">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                }
+            </li>
+
+            @for (int i = 1; i <= ViewBag.MaxPage; i++)
+            {
+                <li class="number-page__item">
+                    <a href="@Url.Action("/Order", new {page = i, type = ViewBag.type})" class="number-page__item-link @Html.Raw(ViewBag.Page == i ? " number-page__item-link--active" : "")">
+                        @i
+                    </a>
+                </li>
+            }
+            <li class="number-page__item">
+                @if (ViewBag.Page < ViewBag.MaxPage)
+                {
+                    <a href="@Url.Action("/Order", new {page = ViewBag.Page + 1, type = ViewBag.type})"
+                       class="number-page__item-link">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                }
+            </li>
+        </ul>
+    </div>
+
+
+    <input class="actionProduct" type="hidden" value="@ViewBag.actionOrder" />
+    <div id="snackbar"> @ViewBag.message <img src="~/@ViewBag.actionOrder" style="width: 80px" /> </div>
+</main>
+@section handleJavascript{
+    <script>
+        //------------Thông báo sau khi hủy đơn-------------
+        let actionProduct = document.querySelector('.actionOrder').value;
+        if (actionProduct.length > 0) {
+            toastMessage();
+        } 
+
+        function toastMessage() {
+            var x = document.getElementById("#snackbar");
+            x.className = "show";
+            setTimeout(function () { x.className = x.className.replace("show", ""); }, 5000);
+        }
+
+        //------------xác nhận hủy đơn------------
+        function btnCancalOrder(id) {
+            const checkConfirm = confirm("Xác nhận hủy đơn hàng có id là: " + id + ".");
+            if (checkConfirm) {
+                window.location.href = `/Admin/SecureOrder/CancalOrder?id=${id}`;
+            }
+        }
+    </script>
+    
+}

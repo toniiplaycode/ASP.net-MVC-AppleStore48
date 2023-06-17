@@ -1,0 +1,132 @@
+﻿@model WEB_ASP.Models.Product
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    WEB_ASP.Models.DB_Entities db = new WEB_ASP.Models.DB_Entities();
+}
+
+<section class="main">
+    <div class="product-full" style="background: white;">
+        <div class="grid container">
+            @using (Html.BeginForm("AddtoCart", "Cart", FormMethod.Post) )
+            {
+                <div class="product-detail row">
+                    <div class="product-detail__img col-sm-12 col-md-6">
+                        <div class="product-detail__img-max-slide">
+                            <img class="mySlides" src="~/@Model.Image" style="display: block; width: 100%;">
+                            <img class="mySlides" src="~/@Model.Image_description" style="display: none; width: 100%;">
+                            <img class="mySlides" src="~/@Model.Image_description2" style="display: none; width: 100%;">
+                        </div>
+
+                        <div class="product-detail__img-mini-slide">
+                            <button type="button" class="product-detail__img-mini-slide-left" onclick="plusDivs(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                            <img class="demo hide show" src="~/@Model.Image" onmouseover="currentDiv(1)">
+                            <img class="demo hide" src="~/@Model.Image_description" onmouseover="currentDiv(2)">
+                            <img class="demo hide" src="~/@Model.Image_description2" onmouseover="currentDiv(3)">
+                            <button type="button" class="product-detail__img-mini-slide-right" onclick="plusDivs(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="product-detail__info col-sm-12 col-md-6">
+                        <h1 class="product-detail__info-name">@Model.Name_product</h1>
+                        <div class="home-product__detail-price product-detail__info-price">
+                            <span class="home-product__detail-price-new product-detail__info-price-new">@string.Format("{0:#,0}", Model.Price)₫</span>
+                            <span class="home-product__detail-price-old product-detail__info-price-old">@string.Format("{0:#,0}", Model.Discount)₫</span>
+                        </div>
+
+                        <div class="quantity mt-2">
+                            <div class="input-group">
+                                <button class="btn-minus btn-cts" onclick="var result = document.getElementById('qty'); var qty = result.value; if( !isNaN(qty) & qty > 1 ) result.value--;return false;" type="button">–</button>
+                                <input aria-label="quantity" type="text" data-id="@Model.IdProduct" class="quantity-field input-text" id="qty" name="qty" size="4" value="1" maxlength="3" onkeypress="if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;" onchange="if(this.value == 0)this.value=1;" />
+                                <input type="hidden" name="IdProduct" value="@Model.IdProduct"/>
+                                <button class="btn-plus btn-cts" onclick="var result = document.getElementById('qty'); var qty = result.value; if( !isNaN(qty)) result.value++;return false;" type="button">+</button>
+                            </div>
+
+                        </div>
+
+                        <div class="product-detail__info-policy">
+                            <ul class="product-detail__info-policy-list">
+                                <li class="product-detail__info-policy-item">
+                                    <span class="product-detail__info-policy-item-check"><i class="fa-solid fa-check"></i></span>
+                                    <span class="product-detail__info-policy-item-detail">Bộ sản phẩm gồm: Hộp, Sách hướng dẫn, Cáp Lightning - Type C</span>
+                                </li>
+                                <li class="product-detail__info-policy-item">
+                                    <span class="product-detail__info-policy-item-check"><i class="fa-solid fa-check"></i></span>
+                                    <span class="product-detail__info-policy-item-detail">Bảo hành chính hãng 1 năm</span>
+                                </li>
+                                <li class="product-detail__info-policy-item">
+                                    <span class="product-detail__info-policy-item-check"><i class="fa-solid fa-check"></i></span>
+                                    <span class="product-detail__info-policy-item-detail">Giao hàng nhanh toàn quốc</span>
+                                </li>
+                                <li class="product-detail__info-policy-item">
+                                    <span class="product-detail__info-policy-item-check"><i class="fa-solid fa-check"></i></span>
+                                    <span class="product-detail__info-policy-item-detail">Gọi đặt mua<a href="tel:0398944226"> 0987 777 777</a></span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="product-detail__info-btn">
+                            <button type="submit" class="add-to-cart" data-id="@Model.IdProduct" id="btnAddToCart">
+                                THÊM VÀO GIỎ HÀNG
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="product-detail__description row">
+                <div class="product-detail__specifications col-12">
+                    <h1 class="product-detail__specifications-title">MÔ TẢ SẢN PHẨM</h1>
+
+                    <p class="product-detail__specifications-des">
+                        @Html.Raw(Model.Discription.Replace("\r\n", "<br />"))
+                    </p>
+
+                    <img src="~/@Model.Image_description" alt="" style="max-width: 360px">
+
+                    <p class="product-detail__specifications-des">
+                        @Html.Raw(Model.Discription2.Replace("\r\n", "<br />"))
+                    </p>
+                    <img src="~/@Model.Image_description2" alt="" style="max-width: 360px">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="similar-product">
+    <div class="product-full bg-grey" style="margin-top: 0; padding-top: 0;">
+        <div class="grid container">
+            <div class="product-detail__similar-product">
+                <h1 class="product-detail__similar-product-title">SẢN PHẨM TƯƠNG TỰ</h1>
+                <a class="product-detail__similar-product-link" href="~/Home/@ViewBag.type">Xem tất cả</a>
+                <div class="product-detail__similar-product-items">
+                    <div class="row">
+                        @foreach (var product in db.Products.Where(m => m.IdProduct != Model.IdProduct && m.IdCategory == Model.IdCategory).Take(4).ToList())
+                            {
+                                <div class="col-6 col-sm-4 col-md-3 mb-4">
+                                    <div class="home-product-item">
+                                        <div class="home-product__img">
+                                            <a class="home-product__img-link" href="~/Home/Detail?id=@product.IdProduct">
+                                                <img src="~/@product.Image" />
+                                            </a>
+                                        </div>
+                                        <div class="home-product__detail">
+                                            <h3 class="home-product__detail-name"><a href="">@product.Name_product</a></h3>
+                                            <div class="home-product__detail-price">
+                                                <span class="home-product__detail-price-new">@string.Format("{0:#,0}", product.Price)₫</span>
+                                                <span class="home-product__detail-price-old">@string.Format("{0:#,0}", product.Discount)₫</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

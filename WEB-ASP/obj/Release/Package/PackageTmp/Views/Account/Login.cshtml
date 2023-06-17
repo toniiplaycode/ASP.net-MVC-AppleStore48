@@ -1,0 +1,43 @@
+﻿﻿@model WEB_ASP.Models.AccountModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="main"  style="background: #fff">
+
+    <article class="grid registration-page">
+        <div class="page-body">
+            <div class="customer container">
+                <div class="wrapper d-none d-sm-none d-md-block">
+                    <img class="wrapper-img" src="~/asset/img/form/img_dangky.jpeg" alt="wrapper sign up">
+                </div>
+                <form class="form-signup" action="Login" method="post">
+                    <div class="form-signup__item">
+                        <h1 class="form-signup__item-title">Đăng nhập</h1>
+                        <div class="form-signup__item-username mb-15">
+                            <label class="label-signup" for="Username">Username:</label>
+                            <input required class="input-singup" type="text" name="Username">
+                        </div>
+                        <div class="form-signup__item-password mb-15">
+                            <label class="label-signup" for="Username">Mật khẩu</label>
+                            <input required class="input-singup" type="password" name="password">
+                            <span style="color: red; font-size:15px; text-align:center">@ViewBag.error</span>
+                        </div>
+                        <div class="form-signup__item-btn">
+                            <button type="submit">Đăng nhập</button>
+                        </div>
+                        <div class="buttons-forgot">
+                            <label> Bạn chưa có tài khoản? </label>
+                            @Html.ActionLink("Tạo tài khoản ngay", "Register", "Account", null, new { @class = "link_access" })
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </article>
+</section>
+
+<script src="asset/main.js"></script>
